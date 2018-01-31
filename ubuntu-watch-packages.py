@@ -131,6 +131,9 @@ def cli(ctx, config):
     Watch specified packages in the ubuntu archive for transition between
     archive pockets. Useful when waiting for a package update to be published.
 
+    We do use time.sleep here which is blocking so it is best to 'nice'
+    the process to reduce CPU usage.
+
     Usage:
     nice -n 19 python ubuntu-watch-packages.py \
     --config="your-ubuntu-watch-packages-config.yaml"
