@@ -3,6 +3,13 @@ Watch specified packages, using [rmadison](http://manpages.ubuntu.com/manpages/a
 
 It polls for new packages every 5 minutes (you can change this by using poll-seconds option)
 
+### Dependencies:
+
+- [python-apt](https://packages.ubuntu.com/artful/python-apt)
+- [click](https://packages.ubuntu.com/artful/python-click)
+- [rmadison](https://packages.ubuntu.com/artful/devscripts)
+- [notify-send](https://packages.ubuntu.com/artful/libnotify-bin)
+
 ## Usage
 
 We do use time.sleep which is blocking so it is best to 'nice'
