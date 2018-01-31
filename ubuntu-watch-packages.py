@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# Displays a notification if a required package appears in the
-# archive (proposed and security pockets).
 import logging
 import os
 import sys
