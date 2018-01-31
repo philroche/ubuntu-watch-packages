@@ -1,0 +1,11 @@
+ubuntu-versions:
+  trusty:
+    packages:
+     - linux
+     - linux-lts-xenial
+  xenial:
+    packages:
+     - linux
+  artful:
+    packages:
+     - linux
