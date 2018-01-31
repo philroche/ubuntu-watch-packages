@@ -1,6 +1,7 @@
 # ubuntu-watch-packages
-Watch specified packages in the ubuntu archive for transition between  
-archive pockets. Useful when waiting for a package update to be published
+Watch specified packages, using [rmadison](http://manpages.ubuntu.com/manpages/artful/en/man1/rmadison.1.html), in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
+
+It polls for new packages every 5 minutes (you can change this by using poll-seconds option)
 
 ## Usage
 
@@ -32,4 +33,12 @@ OR if you want to specify your own config yaml
 ```
 nice -n 19 python ubuntu-watch-packages.py \
 --config="your-ubuntu-watch-packages-config.yaml"
+```
+
+
+OR if you want to specify your own polling interval
+
+```
+nice -n 19 python ubuntu-watch-packages.py \
+--poll-seconds=1200
 ```

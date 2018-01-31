@@ -124,9 +124,11 @@ def watch_packages(initial=False):
         os.path.dirname(__file__),
         "dist-config.yaml"),
         help="Config yaml specifying which packages ubuntu versions to watch")
+@click.option('--poll-seconds', type=int, required=False, default=300,
+              help="Interval, in seconds, between each version check")
 @click.pass_context
-def cli(ctx, config):
-    # type: (Text, Text) -> None
+def cli(ctx, config, poll_seconds):
+    # type: (Text, Text, int) -> None
     """
     Watch specified packages in the ubuntu archive for transition between
     archive pockets. Useful when waiting for a package update to be published.
@@ -141,7 +143,7 @@ def cli(ctx, config):
     default_package_versions = {'proposed': None,
                                 'updates': None,
                                 'security': None}
-    # Parse awslib config
+    # Parse config
     with open(config, 'r') as config_file:
         package_config = yaml.load(config_file)
 
@@ -156,7 +158,7 @@ def cli(ctx, config):
     # Initialise all package version
     watch_packages(initial=True)
     while True:
-        time.sleep(150)  # wait 2.5 minutes before checking again
+        time.sleep(poll_seconds)  # wait 2.5 minutes before checking again
         watch_packages()
 
 
