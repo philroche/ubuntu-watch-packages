@@ -3,20 +3,37 @@ Watch specified packages, using [rmadison](http://manpages.ubuntu.com/manpages/a
 
 It polls for new packages every 5 minutes (you can change this by using poll-seconds option)
 
-### Dependencies:
+### Installation
+
+```
+sudo snap install --classic ubuntu-watch-packages
+```
+
+Or
+
+```
+sudo apt install python-apt rmadison notify-send
+git clone https://github.com/philroche/ubuntu-watch-packages.git
+mkvirtualenv --python=/usr/bin/python3 ubuntu-watch-packages-scratch
+toggleglobalsitepackages
+python setup.py
+```
+
+### System requirements:
 
 - [python-apt](https://packages.ubuntu.com/artful/python-apt)
-- [click](https://packages.ubuntu.com/artful/python-click)
 - [rmadison](https://packages.ubuntu.com/artful/devscripts)
 - [notify-send](https://packages.ubuntu.com/artful/libnotify-bin)
 
-## Usage
+### Python dependencies:
 
-We do use time.sleep which is blocking so it is best to 'nice'
-the process to reduce CPU usage.
+- [readchar](https://pypi.python.org/pypi/readchar)
+- [click](https://pypi.python.org/pypi/click)
+
+## Snap Usage
 
 ```
-nice -n 19 python ubuntu-watch-packages.py
+ubuntu-watch-packages
 ```
 
 which will watch for the following packages:
@@ -35,17 +52,51 @@ ubuntu-versions:
      - linux
 ```
 
-OR if you want to specify your own config yaml
+If you want to specify your own config yaml
 
 ```
-nice -n 19 python ubuntu-watch-packages.py \
---config="your-ubuntu-watch-packages-config.yaml"
+ubuntu-watch-packages --config="your-ubuntu-watch-packages-config.yaml"
 ```
 
 
-OR if you want to specify your own polling interval
+If you want to specify your own polling interval
 
 ```
-nice -n 19 python ubuntu-watch-packages.py \
---poll-seconds=1200
+ubuntu-watch-packages --poll-seconds=1200
 ```
+
+If you want to specify your own polling interval
+
+```
+ubuntu-watch-packages --poll-seconds=1200
+```
+
+If you want more information displayed in console
+
+```
+ubuntu-watch-packages --logging-level=INFO
+```
+
+Any/All of the above options can be combined.
+
+To view a list of all options and help text
+
+```
+ubuntu-watch-packages --help
+```
+
+Once started ubuntu-watch-packages will send a desktop notification when a
+new package version is discovered in the -proposed -updates or -security
+Ubuntu archive pockets.
+
+## Usage
+
+We do use time.sleep which is blocking so it is best to 'nice'
+the process to reduce CPU usage.
+
+```
+nice -n 19 python ubuntu_watch_packages.py
+```
+
+The same arguments detail in "Snap Usage" apply here too.
+

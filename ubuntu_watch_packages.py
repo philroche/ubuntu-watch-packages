@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import _thread
+import json
 import logging
 import os
 import sys
@@ -8,7 +10,9 @@ import yaml
 
 import apt_pkg
 import click
+import readchar
 
+from pkg_resources import resource_filename
 
 apt_pkg.init_system()
 
@@ -20,6 +24,15 @@ ARCHIVE_POCKETS = ['proposed', 'security', 'updates']
 
 # List to store a record of all message sent to desktop
 NOTIFICATIONS_SENT = []
+
+
+def keypress():
+    interrupt_print = readchar.readchar()
+    if interrupt_print is not None and interrupt_print == 'p':
+        print("<Current Package Status>")
+        print(json.dumps(PACKAGE_STATUS, indent=4))
+        print("</Current Package Status>")
+        _thread.start_new_thread(keypress, ())
 
 
 def do_rmadison_search(pocket, package):
@@ -118,15 +131,17 @@ def watch_packages(initial=False):
 
 
 @click.command()
-@click.option('--config', required=False, default=os.path.join(
-        os.path.dirname(__file__),
-        "dist-config.yaml"),
+@click.option('--config', required=False, default=resource_filename(
+        'ubuntu_watch_packages', 'dist-config.yaml'),
         help="Config yaml specifying which packages ubuntu versions to watch")
 @click.option('--poll-seconds', type=int, required=False, default=300,
               help="Interval, in seconds, between each version check")
-@click.pass_context
-def cli(ctx, config, poll_seconds):
-    # type: (Text, Text, int) -> None
+@click.option('--logging-level', type=click.Choice(['DEBUG', 'INFO',
+                                                    'WARNING', 'ERROR']),
+              required=False, default="ERROR",
+              help='How detailed would you like the output.')
+def ubuntu_watch_packages(config, poll_seconds, logging_level):
+    # type: (Text, int, Text) -> None
     """
     Watch specified packages in the ubuntu archive for transition between
     archive pockets. Useful when waiting for a package update to be published.
@@ -135,12 +150,19 @@ def cli(ctx, config, poll_seconds):
     the process to reduce CPU usage.
 
     Usage:
-    nice -n 19 python ubuntu-watch-packages.py \
+    nice -n 19 python ubuntu_watch_packages.py \
     --config="your-ubuntu-watch-packages-config.yaml"
     """
+    # We log to stderr so that a shell calling this will not have logging
+    # output in the $() capture.
+    level = logging.getLevelName(logging_level)
+    logging.basicConfig(level=level, stream=sys.stderr,
+                        format='%(asctime)s [%(levelname)s] %(message)s')
+
     default_package_versions = {'proposed': None,
                                 'updates': None,
                                 'security': None}
+
     # Parse config
     with open(config, 'r') as config_file:
         package_config = yaml.load(config_file)
@@ -155,15 +177,15 @@ def cli(ctx, config, poll_seconds):
                                    for package in package_list})
     # Initialise all package version
     watch_packages(initial=True)
+
+    # Start a separate thread to wait for 'p' keypress.
+    # This will print current package status
+    print("Press \"p\" to see package status.")
+    _thread.start_new_thread(keypress, ())
     while True:
         time.sleep(poll_seconds)  # wait before checking again
         watch_packages()
 
 
 if __name__ == '__main__':
-    # We log to stderr so that a shell calling this will not have logging
-    # output in the $() capture.
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stderr,
-                        format='%(asctime)s [%(levelname)s] %(message)s')
-
-    cli(obj={})
+    ubuntu_watch_packages()
