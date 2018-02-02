@@ -24,4 +24,4 @@ parts:
 
 apps:
   ubuntu-watch-packages:
-    command: nice -n 19 ubuntu-watch-packages
+    command: ubuntu-watch-packages

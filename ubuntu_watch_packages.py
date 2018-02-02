@@ -180,8 +180,8 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level):
 
     # Start a separate thread to wait for 'p' keypress.
     # This will print current package status
-    print("Press \"p\" to see package status.")
-    _thread.start_new_thread(keypress, ())
+    # print("Press \"p\" to see package status.")
+    # _thread.start_new_thread(keypress, ())
     while True:
         time.sleep(poll_seconds)  # wait before checking again
         watch_packages()
