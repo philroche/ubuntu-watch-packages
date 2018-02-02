@@ -1,0 +1,27 @@
+name: ubuntu-watch-packages
+version: '0.1'
+summary: Helpful utility to watch specified packages in the ubuntu archive. # 79 char long summary
+description: |
+  Watch specified packages, using rmadison in the ubuntu archive for transition
+  between archive pockets. Useful when waiting for a package update to be
+  published.
+
+  It polls for new packages every 5 minutes (you can change this by using
+  poll-seconds option)
+grade: stable
+confinement: classic
+
+parts:
+  ubuntu-watch-packages:
+    plugin: python
+    python-version: python3
+    source: .
+    stage-packages:
+      - coreutils
+      - python-apt
+      - devscripts
+      - libnotify-bin
+
+apps:
+  ubuntu-watch-packages:
+    command: nice -n 19 ubuntu-watch-packages
