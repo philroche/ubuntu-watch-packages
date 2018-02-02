@@ -1,2 +1,8 @@
 /.idea/
 /config.yaml
+/__pycache__/
+/parts/
+/prime/
+/stage/
+/ubuntu_watch_packages.egg-info/
+/ubuntu-watch-packages_0.1_amd64.snap
