@@ -17,7 +17,6 @@ parts:
     python-version: python3
     source: .
     stage-packages:
-      - coreutils
       - python-apt
       - devscripts
       - libnotify-bin

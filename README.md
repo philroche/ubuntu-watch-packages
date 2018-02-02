@@ -17,6 +17,7 @@ git clone https://github.com/philroche/ubuntu-watch-packages.git
 mkvirtualenv --python=/usr/bin/python3 ubuntu-watch-packages-scratch
 toggleglobalsitepackages
 python setup.py
+python ubuntu_watch_packages.py --help
 ```
 
 ### System requirements:
@@ -89,14 +90,4 @@ Once started ubuntu-watch-packages will send a desktop notification when a
 new package version is discovered in the -proposed -updates or -security
 Ubuntu archive pockets.
 
-## Usage
-
-We do use time.sleep which is blocking so it is best to 'nice'
-the process to reduce CPU usage.
-
-```
-nice -n 19 python ubuntu_watch_packages.py
-```
-
-The same arguments detail in "Snap Usage" apply here too.
 

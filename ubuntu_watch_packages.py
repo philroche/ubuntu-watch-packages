@@ -14,6 +14,10 @@ import readchar
 
 from pkg_resources import resource_filename
 
+# We do use time.sleep which is blocking so it is best to 'nice'
+# the process to reduce CPU usage. https://linux.die.net/man/1/nice
+os.nice(19)
+
 apt_pkg.init_system()
 
 # Dict to store the status of each package
@@ -146,11 +150,8 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level):
     Watch specified packages in the ubuntu archive for transition between
     archive pockets. Useful when waiting for a package update to be published.
 
-    We do use time.sleep here which is blocking so it is best to 'nice'
-    the process to reduce CPU usage.
-
     Usage:
-    nice -n 19 python ubuntu_watch_packages.py \
+    python ubuntu_watch_packages.py \
     --config="your-ubuntu-watch-packages-config.yaml"
     """
     # We log to stderr so that a shell calling this will not have logging
@@ -180,8 +181,8 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level):
 
     # Start a separate thread to wait for 'p' keypress.
     # This will print current package status
-    # print("Press \"p\" to see package status.")
-    # _thread.start_new_thread(keypress, ())
+    print("Press \"p\" to see package status.")
+    _thread.start_new_thread(keypress, ())
     while True:
         time.sleep(poll_seconds)  # wait before checking again
         watch_packages()
