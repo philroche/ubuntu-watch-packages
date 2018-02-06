@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import _thread
 import json
 import logging
 import os
@@ -12,6 +11,7 @@ import apt_pkg
 import click
 import readchar
 
+from threading import Thread
 from pkg_resources import resource_filename
 
 # We do use time.sleep which is blocking so it is best to 'nice'
@@ -36,7 +36,7 @@ def keypress():
         print("<Current Package Status>")
         print(json.dumps(PACKAGE_STATUS, indent=4))
         print("</Current Package Status>")
-        _thread.start_new_thread(keypress, ())
+        keypress()
 
 
 def do_rmadison_search(pocket, package):
@@ -182,7 +182,8 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level):
     # Start a separate thread to wait for 'p' keypress.
     # This will print current package status
     print("Press \"p\" to see package status.")
-    _thread.start_new_thread(keypress, ())
+    t = Thread(target=keypress)
+    t.start()
     while True:
         time.sleep(poll_seconds)  # wait before checking again
         watch_packages()
