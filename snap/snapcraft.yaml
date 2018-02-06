@@ -15,15 +15,20 @@ parts:
   ubuntu-watch-packages:
     plugin: python
     python-version: python3
+    requirements: snap-virtualenv-requirements.txt
     source: .
     stage-packages:
-      - python-apt
       - devscripts
+      - apt
       - libnotify-bin
+    build-packages:
+      - libapt-pkg-dev
+    organize:
+      wrapper: usr/bin/wrapper
 
 apps:
   ubuntu-watch-packages:
-    command: ubuntu-watch-packages
+    command: wrapper
     plugs:
       - network
       - desktop
