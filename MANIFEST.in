@@ -1,5 +1,7 @@
-include requirements.txt
-include README.md
-include dist-config.yaml
+graft src
+graft src/ubuntu_watch_packages
 
-global-exclude *.py[cod] __pycache__ *.so *.dylib .gitignore config.yaml
+include README.md
+include MANIFEST.in
+
+global-exclude *.py[cod] __pycache__ *.so *.dylib .gitignore src/ubuntu_watch_packages/config.yaml
