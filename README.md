@@ -1,7 +1,7 @@
 # ubuntu-watch-packages
 Watch specified packages, using [rmadison](http://manpages.ubuntu.com/manpages/artful/en/man1/rmadison.1.html), in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
 
-It polls for new packages every 5 minutes (you can change this by using poll-seconds option)
+It polls for new packages every 10 minutes (you can change this by using poll-seconds option)
 
 ### Installation
 

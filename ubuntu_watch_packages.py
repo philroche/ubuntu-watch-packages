@@ -138,7 +138,7 @@ def watch_packages(initial=False):
 @click.option('--config', required=False, default=resource_filename(
         'ubuntu_watch_packages', 'dist-config.yaml'),
         help="Config yaml specifying which packages ubuntu versions to watch")
-@click.option('--poll-seconds', type=int, required=False, default=300,
+@click.option('--poll-seconds', type=int, required=False, default=600,
               help="Interval, in seconds, between each version check")
 @click.option('--logging-level', type=click.Choice(['DEBUG', 'INFO',
                                                     'WARNING', 'ERROR']),
