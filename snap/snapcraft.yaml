@@ -17,6 +17,11 @@ apps:
     plugs:
       - network
       - desktop
+  networktest:
+    command: curl ifconfig.co
+    plugs:
+      - network
+
 
 parts:
   ubuntu-watch-packages-wrapper:
@@ -36,5 +41,6 @@ parts:
       - devscripts
       - apt
       - libnotify-bin
+      - curl
     build-packages:
       - libapt-pkg-dev
