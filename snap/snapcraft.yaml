@@ -19,10 +19,16 @@ apps:
       - desktop
 
 parts:
-  ubuntu-watch-packages:
-    plugin: python
+  ubuntu-watch-packages-wrapper:
+    plugin: dump
+    source: snap
+    stage:
+      - usr/bin/wrapper
     organize:
       wrapper: usr/bin/wrapper
+
+  ubuntu-watch-packages:
+    plugin: python
     python-version: python3
     requirements: snap-virtualenv-requirements.txt
     source: .

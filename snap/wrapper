@@ -1,4 +1,4 @@
 #!/bin/sh
 export LC_ALL=C.UTF-8
 export LANG=C.UTF-8
-exec "$SNAP/ubuntu-watch-packages" "$@"
+exec "$SNAP/bin/ubuntu-watch-packages" "$@"
