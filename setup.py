@@ -26,7 +26,7 @@ setup(
     entry_points={
         'console_scripts': [
             'ubuntu-watch-packages = '
-            'ubuntu_watch_packages:ubuntu_watch_packages',
+            'ubuntu_watch_packages.ubuntu_watch_packages:ubuntu_watch_packages',
         ],
     },
 )
