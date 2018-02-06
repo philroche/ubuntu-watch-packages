@@ -11,9 +11,18 @@ description: |
 grade: stable
 confinement: strict
 
+apps:
+  ubuntu-watch-packages:
+    command: wrapper
+    plugs:
+      - network
+      - desktop
+
 parts:
   ubuntu-watch-packages:
     plugin: python
+    organize:
+      wrapper: usr/bin/wrapper
     python-version: python3
     requirements: snap-virtualenv-requirements.txt
     source: .
@@ -23,12 +32,3 @@ parts:
       - libnotify-bin
     build-packages:
       - libapt-pkg-dev
-    organize:
-      wrapper: usr/bin/wrapper
-
-apps:
-  ubuntu-watch-packages:
-    command: wrapper
-    plugs:
-      - network
-      - desktop
