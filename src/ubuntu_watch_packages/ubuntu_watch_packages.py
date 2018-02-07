@@ -10,6 +10,7 @@ import yaml
 import apt_pkg
 import click
 import readchar
+import requests
 
 from threading import Thread
 from pkg_resources import resource_filename
@@ -18,6 +19,7 @@ from pkg_resources import resource_filename
 # the process to reduce CPU usage. https://linux.die.net/man/1/nice
 os.nice(19)
 
+apt_pkg.config.set('RootDir', os.environ['SNAP'])
 apt_pkg.init_system()
 
 # Dict to store the status of each package
@@ -39,16 +41,26 @@ def keypress():
         keypress()
 
 
-def do_rmadison_search(pocket, package):
+def get_package_version(package_name, pocket):
+    # http://people.canonical.com/~ubuntu-archive/madison.cgi?package=hello&a=amd64&c=&s=zesty&text=on
+    params = {
+        'package': package_name,
+        's': pocket,
+        'a': 'source',
+        'text': 'on',
+    }
+    query = requests.get('http://people.canonical.com/~ubuntu-archive/'
+                         'madison.cgi', params)
+    query.raise_for_status()
+    return query.text
+
+
+def do_madison_search(pocket, package):
     """
-    Runs the search for the packages using rmadison.
+    Runs the search for the packages using madison.
     """
     try:
-        cmd = ['rmadison-wrapper']
-        cmd.extend(['-a', 'source'])
-        cmd.extend(['-s', pocket])
-        cmd.extend([package])
-        output = subprocess.check_output(cmd)
+        output = get_package_version(package, pocket)
         version = None
         if output:
             version = output.split(b"|")[1].decode('utf-8').strip()
@@ -59,7 +71,7 @@ def do_rmadison_search(pocket, package):
                 version = version[0:last_version_dot]
         return version
     except Exception as e:
-        logging.error("Error querying rmadison: %s", str(e))
+        logging.error("Error querying madison: %s", str(e))
 
 
 def send_notification_message(message):
@@ -82,7 +94,7 @@ def watch_packages(initial=False):
             for pocket in ARCHIVE_POCKETS:
                 logging.info("{} {} {}".format(
                         ubuntu_version, pocket, package))
-                package_version = do_rmadison_search(
+                package_version = do_madison_search(
                         '{}-{}'.format(ubuntu_version, pocket), package)
                 current_package_version = \
                     PACKAGE_STATUS[ubuntu_version][package][pocket]

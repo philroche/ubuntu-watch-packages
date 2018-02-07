@@ -29,7 +29,7 @@ parts:
       - usr/bin/rmadison-wrapper
     organize:
       wrapper: usr/bin/wrapper
-      rmadison-wrapperwrapper: usr/bin/rmadison-wrapper
+      rmadison-wrapper: usr/bin/rmadison-wrapper
 
   ubuntu-watch-packages:
     plugin: python
@@ -42,5 +42,6 @@ parts:
       - libnotify-bin
       - findutils
       - wget
+      - liburi-perl
     build-packages:
       - libapt-pkg-dev

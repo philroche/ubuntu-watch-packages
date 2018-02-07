@@ -21,4 +21,6 @@ PERL5LIB="$PERL5LIB:$SNAP/usr/local/lib/site_perl"
 PERL5LIB="$PERL5LIB:$SNAP/usr/lib/$ARCH/perl-base"
 export PERL5LIB
 
+export WGETRC="$SNAP/etc/wgetrc"
+
 exec rmadison "$@"
