@@ -1,5 +1,5 @@
 # ubuntu-watch-packages
-Watch specified packages, using [rmadison](http://manpages.ubuntu.com/manpages/artful/en/man1/rmadison.1.html), in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
+Watch specified packages, using the web service used by [rmadison](http://manpages.ubuntu.com/manpages/artful/en/man1/rmadison.1.html), in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
 
 It polls for new packages every 10 minutes (you can change this by using poll-seconds option)
 
@@ -12,7 +12,7 @@ sudo snap install --classic ubuntu-watch-packages
 Or
 
 ```
-sudo apt install python-apt rmadison notify-send
+sudo apt install python-apt notify-send
 git clone https://github.com/philroche/ubuntu-watch-packages.git
 mkvirtualenv --python=/usr/bin/python3 ubuntu-watch-packages-scratch
 toggleglobalsitepackages
@@ -23,7 +23,6 @@ python ubuntu_watch_packages.py --help
 ### System requirements:
 
 - [python-apt](https://packages.ubuntu.com/artful/python-apt)
-- [rmadison](https://packages.ubuntu.com/artful/devscripts)
 - [notify-send](https://packages.ubuntu.com/artful/libnotify-bin)
 
 ### Python dependencies:
