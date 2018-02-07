@@ -41,26 +41,21 @@ def keypress():
         keypress()
 
 
-def get_package_version(package_name, pocket):
-    # http://people.canonical.com/~ubuntu-archive/madison.cgi?package=hello&a=amd64&c=&s=zesty&text=on
-    params = {
-        'package': package_name,
-        's': pocket,
-        'a': 'source',
-        'text': 'on',
-    }
-    query = requests.get('http://people.canonical.com/~ubuntu-archive/'
-                         'madison.cgi', params)
-    query.raise_for_status()
-    return query.text
-
-
 def do_madison_search(pocket, package):
     """
-    Runs the search for the packages using madison.
+    Runs the search for the packages using the web service used by rmadison.
     """
     try:
-        output = get_package_version(package, pocket)
+        params = {
+            'package': package,
+            's': pocket,
+            'a': 'source',
+            'text': 'on',
+        }
+        query = requests.get('http://people.canonical.com/~ubuntu-archive/'
+                             'madison.cgi', params)
+        query.raise_for_status()
+        output = query.text
         version = None
         if output:
             version = output.split("|")[1].strip()
@@ -150,7 +145,10 @@ def watch_packages(initial=False):
 @click.command()
 @click.option('--config', required=False, default=resource_filename(
         'ubuntu_watch_packages', 'dist-config.yaml'),
-        help="Config yaml specifying which packages ubuntu versions to watch")
+        help="Config yaml specifying which packages ubuntu versions to watch."
+             "{}".format(" When using the ubuntu-watch-packages snap this"
+                         " config must reside under $HOME."
+                                      if os.environ.get('SNAP', None) else ""))
 @click.option('--poll-seconds', type=int, required=False, default=600,
               help="Interval, in seconds, between each version check")
 @click.option('--logging-level', type=click.Choice(['DEBUG', 'INFO',

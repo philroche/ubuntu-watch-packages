@@ -52,7 +52,8 @@ ubuntu-versions:
      - linux
 ```
 
-If you want to specify your own config yaml
+If you want to specify your own config yaml. When using the
+ubuntu-watch-packages snap this config must reside under $HOME.
 
 ```
 ubuntu-watch-packages --config="your-ubuntu-watch-packages-config.yaml"
