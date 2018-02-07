@@ -44,7 +44,7 @@ def do_rmadison_search(pocket, package):
     Runs the search for the packages using rmadison.
     """
     try:
-        cmd = ['rmadison']
+        cmd = ['rmadison-wrapper']
         cmd.extend(['-a', 'source'])
         cmd.extend(['-s', pocket])
         cmd.extend([package])

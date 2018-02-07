@@ -17,20 +17,19 @@ apps:
     plugs:
       - network
       - desktop
-  networktest:
-    command: curl ifconfig.co
-    plugs:
-      - network
-
 
 parts:
   ubuntu-watch-packages-wrapper:
     plugin: dump
     source: snap
+    prepare: |
+      chmod +x wrapper
     stage:
       - usr/bin/wrapper
+      - usr/bin/rmadison-wrapper
     organize:
       wrapper: usr/bin/wrapper
+      rmadison-wrapperwrapper: usr/bin/rmadison-wrapper
 
   ubuntu-watch-packages:
     plugin: python
@@ -41,6 +40,7 @@ parts:
       - devscripts
       - apt
       - libnotify-bin
-      - curl
+      - findutils
+      - wget
     build-packages:
       - libapt-pkg-dev

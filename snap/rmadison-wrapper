@@ -15,15 +15,10 @@ PERL5LIB="$PERL5LIB:$SNAP/usr/local/lib/$ARCH/perl/5.22.1"
 PERL5LIB="$PERL5LIB:$SNAP/usr/local/share/perl/5.22.1"
 PERL5LIB="$PERL5LIB:$SNAP/usr/lib/$ARCH/perl5/5.22"
 PERL5LIB="$PERL5LIB:$SNAP/usr/share/perl5"
-PERL5LIB="$PERL5LIB:$SNAP/usr/share/perl5/URI"
 PERL5LIB="$PERL5LIB:$SNAP/usr/lib/$ARCH/perl/5.22"
 PERL5LIB="$PERL5LIB:$SNAP/usr/share/perl/5.22"
 PERL5LIB="$PERL5LIB:$SNAP/usr/local/lib/site_perl"
 PERL5LIB="$PERL5LIB:$SNAP/usr/lib/$ARCH/perl-base"
 export PERL5LIB
 
-export LC_ALL=C.UTF-8
-export LANG=C.UTF-8
-
-rmadison -a source -s trusty-updates linux
-exec "$SNAP/bin/ubuntu-watch-packages" "$@"
+exec rmadison "$@"
