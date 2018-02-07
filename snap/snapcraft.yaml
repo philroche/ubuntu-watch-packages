@@ -26,10 +26,8 @@ parts:
       chmod +x wrapper
     stage:
       - usr/bin/wrapper
-      - usr/bin/rmadison-wrapper
     organize:
       wrapper: usr/bin/wrapper
-      rmadison-wrapper: usr/bin/rmadison-wrapper
 
   ubuntu-watch-packages:
     plugin: python
@@ -40,8 +38,5 @@ parts:
       - devscripts
       - apt
       - libnotify-bin
-      - findutils
-      - wget
-      - liburi-perl
     build-packages:
       - libapt-pkg-dev

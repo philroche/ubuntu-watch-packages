@@ -19,7 +19,8 @@ from pkg_resources import resource_filename
 # the process to reduce CPU usage. https://linux.die.net/man/1/nice
 os.nice(19)
 
-apt_pkg.config.set('RootDir', os.environ['SNAP'])
+apt_pkg.config.set('RootDir', os.environ.get('SNAP', ''))
+print("apt_pkg config = {}".format(apt_pkg.config.get('RootDir')))
 apt_pkg.init_system()
 
 # Dict to store the status of each package
@@ -63,7 +64,7 @@ def do_madison_search(pocket, package):
         output = get_package_version(package, pocket)
         version = None
         if output:
-            version = output.split(b"|")[1].decode('utf-8').strip()
+            version = output.split("|")[1].strip()
             # We're really only concerned with the version number up
             # to the last int if it's not a ~ version
             if "~" not in version:
@@ -72,6 +73,7 @@ def do_madison_search(pocket, package):
         return version
     except Exception as e:
         logging.error("Error querying madison: %s", str(e))
+        raise e
 
 
 def send_notification_message(message):
