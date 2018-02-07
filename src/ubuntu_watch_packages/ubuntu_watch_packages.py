@@ -20,7 +20,6 @@ from pkg_resources import resource_filename
 os.nice(19)
 
 apt_pkg.config.set('RootDir', os.environ.get('SNAP', ''))
-print("apt_pkg config = {}".format(apt_pkg.config.get('RootDir')))
 apt_pkg.init_system()
 
 # Dict to store the status of each package
