@@ -6,7 +6,7 @@ It polls for new packages every 10 minutes (you can change this by using poll-se
 ### Installation
 
 ```
-sudo snap install --classic ubuntu-watch-packages
+sudo snap install ubuntu-watch-packages
 ```
 
 Or
@@ -14,18 +14,18 @@ Or
 ```
 sudo apt install python-apt notify-send
 git clone https://github.com/philroche/ubuntu-watch-packages.git
-mkvirtualenv --python=/usr/bin/python3 ubuntu-watch-packages-scratch
+mkvirtualenv --python=/usr/bin/python3 ubuntu-watch-packages
 toggleglobalsitepackages
 python setup.py
 python ubuntu_watch_packages.py --help
 ```
 
-### System requirements:
+### System requirements (If not using the snap):
 
 - [python-apt](https://packages.ubuntu.com/artful/python-apt)
 - [notify-send](https://packages.ubuntu.com/artful/libnotify-bin)
 
-### Python dependencies:
+### Python dependencies (If not using the snap):
 
 - [readchar](https://pypi.python.org/pypi/readchar)
 - [click](https://pypi.python.org/pypi/click)
