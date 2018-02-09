@@ -155,7 +155,10 @@ def watch_packages(initial=False):
                                                     'WARNING', 'ERROR']),
               required=False, default="ERROR",
               help='How detailed would you like the output.')
-def ubuntu_watch_packages(config, poll_seconds, logging_level):
+@click.option('--config-skeleton', is_flag=True, default=False,
+              help='Print example config.')
+def ubuntu_watch_packages(config, poll_seconds, logging_level,
+                          config_skeleton):
     # type: (Text, int, Text) -> None
     """
     Watch specified packages in the ubuntu archive for transition between
@@ -178,6 +181,11 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level):
     # Parse config
     with open(config, 'r') as config_file:
         package_config = yaml.load(config_file)
+        if config_skeleton:
+            output = yaml.dump(package_config, Dumper=yaml.Dumper)
+            print("# Sample config.")
+            print(output)
+            exit(0)
 
     ubuntu_versions = package_config.get('ubuntu-versions', {})
 
