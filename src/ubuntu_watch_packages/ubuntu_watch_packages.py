@@ -10,11 +10,11 @@ import yaml
 import apt_pkg
 import click
 import readchar
-import requests
 
 from threading import Thread
 from pkg_resources import resource_filename
 
+from babel.dates import format_datetime
 from launchpadlib.launchpad import Launchpad
 
 # Log in to launchpad annonymously - we use launchpad to find
@@ -73,24 +73,27 @@ def get_package_stats(package, series, pocket):
                 exact_match=True,
                 source_name=package,
                 pocket=pocket,
-                distro_series=series)[0]
+                distro_series=series)
 
-        full_version = package_published_sources.source_package_version
-        version = full_version
+        if len(package_published_sources) > 0:
+            package_published_source = package_published_sources[0]
 
-        # We're really only concerned with the version number up
-        # to the last int if it's not a ~ version
-        if "~" not in full_version:
-            last_version_dot = full_version.rfind('.')
-            version = full_version[0:last_version_dot]
+            full_version = package_published_source.source_package_version
+            version = full_version
 
-        package_stats["version"] = version
-        package_stats["full_version"] = full_version
+            # We're really only concerned with the version number up
+            # to the last int if it's not a ~ version
+            if "~" not in full_version:
+                last_version_dot = full_version.rfind('.')
+                version = full_version[0:last_version_dot]
 
-        package_stats["date_published"] = \
-            str(package_published_sources.date_published)
+            package_stats["version"] = version
+            package_stats["full_version"] = full_version
+
+            package_stats["date_published"] = \
+                format_datetime(package_published_source.date_published)
     except Exception as e:
-        logging.error("Error querying madison: %s", str(e))
+        logging.error("Error querying launchpad API: %s", str(e))
         raise e
 
     return package_stats

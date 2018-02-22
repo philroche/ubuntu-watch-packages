@@ -1,4 +1,4 @@
+babel
 click
 pyyaml
 readchar
-requests

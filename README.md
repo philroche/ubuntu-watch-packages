@@ -30,7 +30,7 @@ python ubuntu_watch_packages.py --help
 
 - [readchar](https://pypi.python.org/pypi/readchar)
 - [click](https://pypi.python.org/pypi/click)
-- [requests](https://pypi.python.org/pypi/requests)
+- [babel](https://pypi.python.org/pypi/Babel)
 - [pyyaml](https://pypi.python.org/pypi/PyYAML)
 
 ## Snap Usage
