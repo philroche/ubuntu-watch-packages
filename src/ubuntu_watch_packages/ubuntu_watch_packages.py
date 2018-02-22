@@ -93,8 +93,8 @@ def get_package_stats(package, series, pocket):
             package_stats["date_published"] = \
                 format_datetime(package_published_source.date_published)
     except Exception as e:
-        logging.error("Error querying launchpad API: %s", str(e))
-        raise e
+        logging.error("Error querying launchpad API: %s. \n "
+                      "We will retry. \n", str(e))
 
     return package_stats
 
