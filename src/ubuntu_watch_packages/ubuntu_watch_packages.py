@@ -15,6 +15,14 @@ import requests
 from threading import Thread
 from pkg_resources import resource_filename
 
+from launchpadlib.launchpad import Launchpad
+
+# Log in to launchpad annonymously - we use launchpad to find
+# the package publish time
+launchpad = Launchpad.login_anonymously('ubuntu-watch-packages', 'production')
+ubuntu = launchpad.distributions["ubuntu"]
+ubuntu_archive = ubuntu.main_archive
+
 # We do use time.sleep which is blocking so it is best to 'nice'
 # the process to reduce CPU usage. https://linux.die.net/man/1/nice
 os.nice(19)
@@ -26,7 +34,7 @@ apt_pkg.init_system()
 PACKAGE_STATUS = {}
 
 # Which archive pockets are checked
-ARCHIVE_POCKETS = ['proposed', 'security', 'updates']
+ARCHIVE_POCKETS = ['Proposed', 'Security', 'Updates']
 
 # List to store a record of all message sent to desktop
 NOTIFICATIONS_SENT = []
@@ -39,35 +47,6 @@ def keypress():
         print(json.dumps(PACKAGE_STATUS, indent=4))
         print("</Current Package Status>")
         keypress()
-
-
-def do_madison_search(pocket, package):
-    """
-    Runs the search for the packages using the web service used by rmadison.
-    """
-    try:
-        params = {
-            'package': package,
-            's': pocket,
-            'a': 'source',
-            'text': 'on',
-        }
-        query = requests.get('http://people.canonical.com/~ubuntu-archive/'
-                             'madison.cgi', params)
-        query.raise_for_status()
-        output = query.text
-        version = None
-        if output:
-            version = output.split("|")[1].strip()
-            # We're really only concerned with the version number up
-            # to the last int if it's not a ~ version
-            if "~" not in version:
-                last_version_dot = version.rfind('.')
-                version = version[0:last_version_dot]
-        return version
-    except Exception as e:
-        logging.error("Error querying madison: %s", str(e))
-        raise e
 
 
 def send_notification_message(message):
@@ -84,25 +63,62 @@ def send_notification_message(message):
         logging.error("Error sending notify-send: %s", str(e))
 
 
-def watch_packages(initial=False):
+def get_package_stats(package, series, pocket):
+    series = ubuntu.getSeries(name_or_version=series)
+    package_stats = {"full_version": None,
+                     "version": None,
+                     "date_published": None}
+    try:
+        package_published_sources = ubuntu_archive.getPublishedSources(
+                exact_match=True,
+                source_name=package,
+                pocket=pocket,
+                distro_series=series)[0]
+
+        full_version = package_published_sources.source_package_version
+        version = full_version
+
+        # We're really only concerned with the version number up
+        # to the last int if it's not a ~ version
+        if "~" not in full_version:
+            last_version_dot = full_version.rfind('.')
+            version = full_version[0:last_version_dot]
+
+        package_stats["version"] = version
+        package_stats["full_version"] = full_version
+
+        package_stats["date_published"] = \
+            str(package_published_sources.date_published)
+    except Exception as e:
+        logging.error("Error querying madison: %s", str(e))
+        raise e
+
+    return package_stats
+
+
+def watch_packages(initial=False, notify_on_startup=False):
     for ubuntu_version, packages in PACKAGE_STATUS.items():
         for package in packages.keys():
             for pocket in ARCHIVE_POCKETS:
-                logging.info("{} {} {}".format(
-                        ubuntu_version, pocket, package))
-                package_version = do_madison_search(
-                        '{}-{}'.format(ubuntu_version, pocket), package)
+                logging.info("Getting stats for {} {} {}".format(
+                        ubuntu_version, pocket.lower(), package))
+                package_stats = get_package_stats(package,
+                                                  ubuntu_version,
+                                                  pocket)
+
+                package_version = package_stats["version"]
                 current_package_version = \
-                    PACKAGE_STATUS[ubuntu_version][package][pocket]
+                    PACKAGE_STATUS[ubuntu_version][package][pocket]["version"]
 
                 message = None
                 newer_package = False
                 new_package = False
 
                 if package_version:
-                    message = "{} {} for {} is in {} pocket" \
+                    message = "{} {} for {} is in {} pocket (published @ {})" \
                         .format(package, package_version,
-                                ubuntu_version, pocket)
+                                ubuntu_version, pocket.lower(),
+                                package_stats["date_published"])
 
                 # Is the version in archive greater than
                 # that in our database?
@@ -124,18 +140,21 @@ def watch_packages(initial=False):
                         and not initial:
                     new_package = True
                     is_new_message = "{} is new to the {} pocket".format(
-                            package_version, pocket)
+                            package_version, pocket.lower())
                     message = '** NEW TO POCKET ** {}. {}'.format(
                         message, is_new_message)
 
                 # If the package is newer or it's a new package send
                 # a notification
                 if newer_package or initial or new_package:
-                    PACKAGE_STATUS[ubuntu_version][package][pocket] = \
-                        package_version
+                    PACKAGE_STATUS[ubuntu_version][package][pocket] \
+                        = package_stats
                     if message and message not in NOTIFICATIONS_SENT:
                         NOTIFICATIONS_SENT.append(message)
-                        if not initial or (initial and pocket == "proposed"):
+                        if not initial or (
+                                initial
+                                and pocket == "Proposed"
+                                and notify_on_startup):
                             send_notification_message(message)
 
                 if message:
@@ -157,9 +176,12 @@ def watch_packages(initial=False):
               help='How detailed would you like the output.')
 @click.option('--config-skeleton', is_flag=True, default=False,
               help='Print example config.')
+@click.option('--notify-on-startup', is_flag=True, default=False,
+              help='Do not notify me of package version on startup. Only do '
+                   'so when new package versions appear.')
 def ubuntu_watch_packages(config, poll_seconds, logging_level,
-                          config_skeleton):
-    # type: (Text, int, Text) -> None
+                          config_skeleton, notify_on_startup):
+    # type: (Text, int, Text, bool, bool) -> None
     """
     Watch specified packages in the ubuntu archive for transition between
     archive pockets. Useful when waiting for a package update to be published.
@@ -174,9 +196,12 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level,
     logging.basicConfig(level=level, stream=sys.stderr,
                         format='%(asctime)s [%(levelname)s] %(message)s')
 
-    default_package_versions = {'proposed': None,
-                                'updates': None,
-                                'security': None}
+    default_package_stats = {"full_version": None,
+                             "version": None,
+                             "date_published": None}
+    default_package_versions = {'Proposed': default_package_stats,
+                                'Updates': default_package_stats,
+                                'Security': default_package_stats}
 
     # Parse config
     with open(config, 'r') as config_file:
@@ -196,7 +221,8 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level,
                                   {package: default_package_versions.copy()
                                    for package in package_list})
     # Initialise all package version
-    watch_packages(initial=True)
+    watch_packages(initial=True,
+                   notify_on_startup=notify_on_startup)
 
     # Start a separate thread to wait for 'p' keypress.
     # This will print current package status

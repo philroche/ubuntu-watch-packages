@@ -1,7 +1,7 @@
 # ubuntu-watch-packages
-Watch specified packages, using the web service used by [rmadison](http://manpages.ubuntu.com/manpages/artful/en/man1/rmadison.1.html), in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
+Watch specified packages in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
 
-It polls for new packages every 10 minutes (you can change this by using poll-seconds option)
+It polls the launchpad API for new packages every 10 minutes (you can change this by using poll-seconds option)
 
 ### Installation
 
@@ -23,12 +23,15 @@ python ubuntu_watch_packages.py --help
 ### System requirements (If not using the snap):
 
 - [python-apt](https://packages.ubuntu.com/artful/python-apt)
+- [python3-launchpadlib](https://packages.ubuntu.com/artful/python3-launchpadlib)
 - [notify-send](https://packages.ubuntu.com/artful/libnotify-bin)
 
 ### Python dependencies (If not using the snap):
 
 - [readchar](https://pypi.python.org/pypi/readchar)
 - [click](https://pypi.python.org/pypi/click)
+- [requests](https://pypi.python.org/pypi/requests)
+- [pyyaml](https://pypi.python.org/pypi/PyYAML)
 
 ## Snap Usage
 

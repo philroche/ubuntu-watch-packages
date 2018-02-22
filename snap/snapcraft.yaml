@@ -1,13 +1,13 @@
 name: ubuntu-watch-packages
-version: '0.1'
+version: '0.2'
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
-  Watch specified packages, using the web service used by rmadison, in the
+  Watch specified packages in the
   ubuntu archive for transition between archive pockets. Useful when waiting
   for a package update to be published.
 
-  It polls for new packages every 10 minutes (you can change this by using
-  poll-seconds option)
+  It polls the launchpad API for new packages every 10 minutes (you can
+  change this by using poll-seconds option)
 
   Usage:
 
@@ -44,5 +44,6 @@ parts:
       - devscripts
       - apt
       - libnotify-bin
+      - python3-launchpadlib
     build-packages:
       - libapt-pkg-dev
