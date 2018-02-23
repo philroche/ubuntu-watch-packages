@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import json
 import logging
 import os
@@ -11,6 +12,7 @@ import apt_pkg
 import click
 import readchar
 
+from datetime import datetime
 from threading import Thread
 from pkg_resources import resource_filename
 
@@ -39,13 +41,16 @@ ARCHIVE_POCKETS = ['Proposed', 'Security', 'Updates']
 # List to store a record of all message sent to desktop
 NOTIFICATIONS_SENT = []
 
+# Var to store the last datetime that we polled the launchpad API
+LAST_POLL = None
+
 
 def keypress():
     interrupt_print = readchar.readchar()
     if interrupt_print is not None and interrupt_print == 'p':
-        print("<Current Package Status>")
+        print("<Current Package Status lastpoll=\"{}\">".format(LAST_POLL))
         print(json.dumps(PACKAGE_STATUS, indent=4))
-        print("</Current Package Status>")
+        print("</Current Package Status lastpoll=\"{}\">".format(LAST_POLL))
         keypress()
 
 
@@ -64,6 +69,7 @@ def send_notification_message(message):
 
 
 def get_package_stats(package, series, pocket):
+    global LAST_POLL
     series = ubuntu.getSeries(name_or_version=series)
     package_stats = {"full_version": None,
                      "version": None,
@@ -92,6 +98,7 @@ def get_package_stats(package, series, pocket):
 
             package_stats["date_published"] = \
                 format_datetime(package_published_source.date_published)
+        LAST_POLL = format_datetime(datetime.utcnow())
     except Exception as e:
         logging.error("Error querying launchpad API: %s. \n "
                       "We will retry. \n", str(e))
