@@ -44,13 +44,18 @@ NOTIFICATIONS_SENT = []
 # Var to store the last datetime that we polled the launchpad API
 LAST_POLL = None
 
+# Var to store the polling interval
+POLL_SECONDS = None
+
 
 def keypress():
     interrupt_print = readchar.readchar()
     if interrupt_print is not None and interrupt_print == 'p':
-        print("<Current Package Status lastpoll=\"{}\">".format(LAST_POLL))
+        print("<Current Package Status pollinterval=\"{}\" "
+              "lastpoll=\"{}\">".format(POLL_SECONDS, LAST_POLL))
         print(json.dumps(PACKAGE_STATUS, indent=4))
-        print("</Current Package Status lastpoll=\"{}\">".format(LAST_POLL))
+        print("</Current Package Status pollinterval=\"{}\" "
+              "lastpoll=\"{}\">".format(POLL_SECONDS, LAST_POLL))
         keypress()
 
 
@@ -200,6 +205,12 @@ def ubuntu_watch_packages(config, poll_seconds, logging_level,
     python ubuntu_watch_packages.py \
     --config="your-ubuntu-watch-packages-config.yaml"
     """
+    global POLL_SECONDS
+    global PACKAGE_STATUS
+
+    # Set global POLL_SECONDS as this is used in the status dump
+    POLL_SECONDS = poll_seconds
+
     # We log to stderr so that a shell calling this will not have logging
     # output in the $() capture.
     level = logging.getLevelName(logging_level)
