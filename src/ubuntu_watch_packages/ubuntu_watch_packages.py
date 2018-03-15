@@ -75,11 +75,13 @@ def send_notification_message(message):
 
 def get_package_stats(package, series, pocket):
     global LAST_POLL
-    series = ubuntu.getSeries(name_or_version=series)
-    package_stats = {"full_version": None,
-                     "version": None,
-                     "date_published": None}
+
     try:
+        series = ubuntu.getSeries(name_or_version=series)
+        package_stats = {"full_version": None,
+                         "version": None,
+                         "date_published": None}
+
         package_published_sources = ubuntu_archive.getPublishedSources(
                 exact_match=True,
                 source_name=package,
