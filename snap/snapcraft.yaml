@@ -27,7 +27,7 @@ apps:
 parts:
   ubuntu-watch-packages-wrapper:
     plugin: dump
-    source: snap
+    source: snap/local
     prepare: |
       chmod +x wrapper
     stage:
