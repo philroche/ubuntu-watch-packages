@@ -285,38 +285,6 @@ def cli(ctx):
 
 
 @cli.command()
-@click.option('--jsondump', required=False, default=resource_filename(
-        'ubuntu_watch_packages', 'samplejson.json'),
-        help="JSON dump of the package stats you want to render to HTML."
-             "{}".format(" When using the ubuntu-watch-packages snap this"
-                         " config must reside under $HOME."
-                                      if os.environ.get('SNAP', None) else ""))
-@click.option('--config', required=False, default=resource_filename(
-        'ubuntu_watch_packages', 'config.yaml'),
-        help="Config yaml specifying which packages ubuntu versions to watch."
-             "{}".format(" When using the ubuntu-watch-packages snap this"
-                         " config must reside under $HOME."
-                                      if os.environ.get('SNAP', None) else ""))
-@click.option('--output-directory', envvar='UBUNTU_WATCH_PACKAGES_OUTPUT_DIRECTORY',
-              required=False, type=click.Path(), default=lambda:
-              os.environ.get('SNAP_USER_COMMON', "/tmp/ubuntu_watch_packages/"),
-              help="Output directory. [default: {}]. You can also set "
-                   "UBUNTU_WATCH_PACKAGES_OUTPUT_DIRECTORY as an environment "
-                   "variable.{}"
-                   .format(os.environ.get('SNAP_USER_COMMON',
-                                          "/tmp/ubuntu_watch_packages/"),
-                           " When using the ubuntu_watch_packages snap this config "
-                           "must reside under $HOME."
-                           if os.environ.get('SNAP', None) else ""))
-@click.pass_context
-def render_package_stats(ctx, jsondump, config, output_directory):
-    with open(jsondump) as f:
-        json_data = json.load(f)
-        with open(config, 'r') as config_file:
-            package_config = yaml.load(config_file)
-            render(json_data, output_directory, package_config)
-
-@cli.command()
 @click.option('--config', required=False, default=resource_filename(
         'ubuntu_watch_packages', 'dist-config.yaml'),
         help="Config yaml specifying which packages ubuntu versions to watch."

@@ -20,11 +20,20 @@ python setup.py
 python ubuntu_watch_packages.py --help
 ```
 
+babel
+click
+pyyaml
+readchar
+jinja2
+humanize
+
 ### System requirements (If not using the snap):
 
-- [python-apt](https://packages.ubuntu.com/artful/python-apt)
-- [python3-launchpadlib](https://packages.ubuntu.com/artful/python3-launchpadlib)
-- [notify-send](https://packages.ubuntu.com/artful/libnotify-bin)
+- [python-apt](https://packages.ubuntu.com/bionic/python-apt)
+- [python3-launchpadlib](https://packages.ubuntu.com/bionic/python3-launchpadlib)
+- [python3-distro-info](https://packages.ubuntu.com/bionic/python3-distro-info)
+- [notify-send](https://packages.ubuntu.com/bionic/libnotify-bin)
+- [distro_info](https://packages.ubuntu.com/bionic/distro_info)
 
 ### Python dependencies (If not using the snap):
 
@@ -32,6 +41,8 @@ python ubuntu_watch_packages.py --help
 - [click](https://pypi.python.org/pypi/click)
 - [babel](https://pypi.python.org/pypi/Babel)
 - [pyyaml](https://pypi.python.org/pypi/PyYAML)
+- [jinja2](https://pypi.python.org/pypi/jinja2)
+- [humanize](https://pypi.python.org/pypi/humanize)
 
 ## Snap Usage
 
@@ -79,6 +90,24 @@ If you want more information displayed in console
 
 ```
 ubuntu-watch-packages --logging-level=INFO
+```
+
+If you want information rendered to HTML
+
+```
+ubuntu-watch-packages --rendertohtml
+```
+
+If you want to specify where the rendered HTML should be saved
+
+```
+ubuntu-watch-packages --output-directory="~/mydirectory"
+```
+
+If you only want to poll once
+
+```
+ubuntu-watch-packages --runonce
 ```
 
 Any/All of the above options can be combined.
