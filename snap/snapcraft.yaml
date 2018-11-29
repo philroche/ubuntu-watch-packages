@@ -45,5 +45,8 @@ parts:
       - apt
       - libnotify-bin
       - python3-launchpadlib
+      - git
+      - distro-info
     build-packages:
       - libapt-pkg-dev
+      - git

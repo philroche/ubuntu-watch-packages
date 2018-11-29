@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Package Stats</title>
+
+    <style type="text/css">
+        .suitewrapper{
+            padding-left: 2em;
+            padding-right: 2em;
+        }
+        #generated-time{
+            font-size: 80%;
+            margin-top: 1em;
+            text-align: center;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/kt-2.2.1/r-2.1.1/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.15/kt-2.2.1/r-2.1.1/datatables.min.js"></script>
+</head>
+<body>
+<br />
+<div class="suitewrapper">
+    <p>For further kernel SRU information, see <a href="http://kernel.ubuntu.com/sru/kernel-sru-workflow.html">http://kernel.ubuntu.com/sru/kernel-sru-workflow.html</a></p>
+
+        <div class="btn-group btn-group-justified suite-toggle" role="group" >
+            {% for suite, packages in suites.items() %}
+                <a href="#" id="suite_{{ suite }}" class="btn btn-primary">{{ suite }}</a>
+            {% endfor %}
+            <a href="#" id="reset" class="btn btn-default">All</a>
+        </div>
+
+        {% for suite, packages in suites.items() %}
+            <div id="suite_wrapper_{{ suite }}">
+                <h2>{{ suite }}</h2>
+                <table class="suite_data_table_{{ suite }} table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Package</th>
+                        <th>Release</th>
+                        <th>Updates</th>
+                        <th>Security</th>
+                        <th>Proposed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for package, stats in packages.items() %}
+                    <tr>
+                        <td><a href="https://pad.lv/p/{{ package }}">{{ package }}</a></td>
+                        <td>
+                            {%  if stats.Release.version or stats.Release.full_version or stats.Release.date_published %}
+                                <dl>
+                                    <dt>Version</dt>
+                                    <dd>{{ stats.Release.version }}</dd>
+                                    <dt>Full version</dt>
+                                    <dd><a href="{{ stats.Release.link }}">{{ stats.Release.full_version }}</a></dd>
+                                    <dt>Date Published</dt>
+                                    <dd>{{ stats.Release.date_published }} <em>({{ stats.Release.published_age }})</em></dd>
+                                </dl>
+                            {% endif %}
+                            {%  if stats.Release.binaries.amd64.version or stats.Release.binaries.arm64.version %}
+                                <strong>Binaries</strong>
+                                <dl>
+                                    {% if stats.Release.binaries.amd64.version %}
+                                        <dt>AMD64</dt>
+                                        <dd><a href="{{ stats.Release.binaries.amd64.link }}">{{ stats.Release.binaries.amd64.version }}</a></dd>
+                                    {% endif %}
+                                    {% if stats.Release.binaries.arm64.version %}
+                                    <dt>ARM64</dt>
+                                    <dd><a href="{{ stats.Release.binaries.arm64.link }}">{{ stats.Release.binaries.arm64.version }}</a></dd>
+                                    {% endif %}
+                                </dl>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {%  if stats.Updates.version or stats.Updates.full_version or stats.Updates.date_published %}
+                                <dl>
+                                    <dt>Version</dt>
+                                    <dd>{{ stats.Updates.version }}</dd>
+                                    <dt>Full version</dt>
+                                    <dd><a href="{{ stats.Updates.link }}">{{ stats.Updates.full_version }}</a></dd>
+                                    <dt>Date Published</dt>
+                                    <dd>{{ stats.Updates.date_published }} <em>({{ stats.Updates.published_age }})</em></dd>
+                                </dl>
+                            {% endif %}
+                            {%  if stats.Updates.binaries.amd64.version or stats.Updates.binaries.arm64.version %}
+                                <strong>Binaries</strong>
+                                <dl>
+                                    {% if stats.Updates.binaries.amd64.version %}
+                                        <dt>AMD64</dt>
+                                        <dd><a href="{{ stats.Updates.binaries.amd64.link }}">{{ stats.Updates.binaries.amd64.version }}</a></dd>
+                                    {% endif %}
+                                    {% if stats.Updates.binaries.arm64.version %}
+                                    <dt>ARM64</dt>
+                                    <dd><a href="{{ stats.Updates.binaries.arm64.link }}">{{ stats.Updates.binaries.arm64.version }}</a></dd>
+                                    {% endif %}
+                                </dl>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {%  if stats.Security.version or stats.Security.full_version or stats.Security.date_published %}
+                                <dl>
+                                    <dt>Version</dt>
+                                    <dd>{{ stats.Security.version }}</dd>
+                                    <dt>Full version</dt>
+                                    <dd><a href="{{ stats.Security.link }}">{{ stats.Security.full_version }}</a></dd>
+                                    <dt>Date Published</dt>
+                                    <dd>{{ stats.Security.date_published }} <em>({{ stats.Security.published_age }})</em></dd>
+                                </dl>
+                            {% endif %}
+                            {%  if stats.Security.binaries.amd64.version or stats.Security.binaries.arm64.version %}
+                                <strong>Binaries</strong>
+                                <dl>
+                                    {% if stats.Security.binaries.amd64.version %}
+                                        <dt>AMD64</dt>
+                                        <dd><a href="{{ stats.Security.binaries.amd64.link }}">{{ stats.Security.binaries.amd64.version }}</a></dd>
+                                    {% endif %}
+                                    {% if stats.Security.binaries.arm64.version %}
+                                    <dt>ARM64</dt>
+                                    <dd><a href="{{ stats.Security.binaries.arm64.link }}">{{ stats.Security.binaries.arm64.version }}</a></dd>
+                                    {% endif %}
+                                </dl>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {%  if stats.Proposed.version or stats.Proposed.full_version or stats.Proposed.date_published %}
+                                <dl>
+                                    <dt>Version</dt>
+                                    <dd>{{ stats.Proposed.version }}</dd>
+                                    <dt>Full version</dt>
+                                    <dd><a href="{{ stats.Proposed.link }}">{{ stats.Proposed.full_version }}</a></dd>
+                                    <dt>Date Published</dt>
+                                    <dd>{{ stats.Proposed.date_published }} <em>({{ stats.Proposed.published_age }})</em></dd>
+                                </dl>
+                            {% endif %}
+                            {%  if stats.Proposed.binaries.amd64.version or stats.Proposed.binaries.arm64.version %}
+                                <strong>Binaries</strong>
+                                <dl>
+                                    {% if stats.Proposed.binaries.amd64.version %}
+                                        <dt>AMD64</dt>
+                                        <dd><a href="{{ stats.Proposed.binaries.amd64.link }}">{{ stats.Proposed.binaries.amd64.version }}</a></dd>
+                                    {% endif %}
+                                    {% if stats.Proposed.binaries.arm64.version %}
+                                    <dt>ARM64</dt>
+                                    <dd><a href="{{ stats.Proposed.binaries.arm64.link }}">{{ stats.Proposed.binaries.arm64.version }}</a></dd>
+                                    {% endif %}
+                                </dl>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        {% endfor %}
+         <ul>
+             <li>
+                 <a href="config.yaml">config.yaml used to generate these tables</a>
+             </li>
+             <li>
+                 <a href="package-stats.json">JSON output of these tables</a>
+             </li>
+         </ul>
+    </div>
+
+    <div id="generated-time">Generated at {{ generation_time.strftime('%Y-%m-%d %H:%M:%S %Z') }}</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        {% for suite, packages in suites.items() %}
+            var suite_data_table_{{ suite}} = $('.suite_data_table_{{ suite }}').DataTable({
+                 paging: false,
+                 order: [[ 0, "asc" ]]
+            });
+            suite_data_table_{{ suite}}.draw();
+            $("#suite_wrapper_{{ suite }}").hide();
+            $('#suite_{{ suite }}').removeClass('btn-primary').addClass('btn-default');
+
+            $("#suite_{{ suite }}").click(function(event) {
+                event.preventDefault();
+
+                {% for sub_suite, packages in suites.items() %}
+                    $('#suite_{{ sub_suite }}').removeClass('btn-primary').addClass('btn-default');
+                    $("#suite_wrapper_{{ sub_suite }}").hide();
+                {% endfor %}
+                $('#reset').removeClass('btn-primary').addClass('btn-default');
+                $(this).addClass('btn-primary').removeClass('btn-default');
+                $("#suite_wrapper_{{ suite }}").show();
+            });
+        {% endfor %}
+
+        $("#suite_wrapper_{{ first_suite }}").show();
+        $("#suite_{{ first_suite }}").addClass('btn-primary').removeClass('btn-default');
+
+        $("#reset").click(function(event) {
+            event.preventDefault();
+            {% for suite, packages in suites.items() %}
+                    $('#suite_{{ suite }}').removeClass('btn-primary').addClass('btn-default');
+                    $("#suite_wrapper_{{ suite }}").show();
+                {% endfor %}
+            $(this).addClass('btn-primary').removeClass('btn-default');
+            $.fn.dataTable.ext.search.pop();
+        });
+    } );
+
+</script>
+</body>
+

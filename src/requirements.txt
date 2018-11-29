@@ -2,3 +2,8 @@ babel
 click
 pyyaml
 readchar
+jinja2
+humanize
+# distro-info isn't properly available from PyPI, so use the git import of the
+# package so we have it reliably available
+git+https://git.launchpad.net/ubuntu/+source/distro-info#egg=distro_info&subdirectory=python

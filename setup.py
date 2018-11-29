@@ -27,6 +27,8 @@ setup(
         'console_scripts': [
             'ubuntu-watch-packages = '
             'ubuntu_watch_packages.ubuntu_watch_packages:ubuntu_watch_packages',
+            'render-package-stats = '
+            'ubuntu_watch_packages.ubuntu_watch_packages:render_package_stats',
         ],
     },
 )
