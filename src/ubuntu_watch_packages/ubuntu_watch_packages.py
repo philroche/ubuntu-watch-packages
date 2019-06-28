@@ -273,7 +273,7 @@ def render(package_stats, output_directory, package_config):
     tmpl = env.get_template('package-stats.html')
 
     # sort the package stats
-    correct_order = [rel.series for rel in UbuntuDistroInfo()._releases]
+    correct_order = UbuntuDistroInfo().all
 
     package_stats = OrderedDict(sorted(package_stats.items(),
                                        key=lambda i:correct_order.index(i[0])))
