@@ -1,5 +1,5 @@
 name: ubuntu-watch-packages
-version: '0.3'
+version: '0.4'
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
   Watch specified packages in the

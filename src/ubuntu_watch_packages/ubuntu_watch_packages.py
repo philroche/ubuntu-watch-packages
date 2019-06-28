@@ -54,6 +54,8 @@ POLL_SECONDS = None
 
 NOW = pytz.utc.localize(datetime.utcnow())
 
+SUMMARY_ONLY = False  # If True only print the summary
+
 
 def keypress():
     interrupt_print = readchar.readchar()
@@ -67,7 +69,25 @@ def keypress():
 
 
 def print_stats():
-    print(json.dumps(PACKAGE_STATUS, indent=4))
+    if not SUMMARY_ONLY:
+        print(json.dumps(PACKAGE_STATUS, indent=4))
+    else:
+        print_stats_summary()
+
+
+def print_stats_summary():
+    for ubuntu_version, package_stats in PACKAGE_STATUS.items():
+        print(ubuntu_version)
+        for package, pockets in package_stats.items():
+            print("\t{}".format(package))
+            for pocket, stats in pockets.items():
+                if stats['full_version']:
+                    print("\t\t{} {} @ {} ({})".format(
+                            pocket,
+                            stats['full_version'],
+                            stats['date_published'],
+                            stats['published_age'],
+                    ))
 
 
 def send_notification_message(message):
@@ -304,6 +324,8 @@ def cli(ctx):
                    'so when new package versions appear.')
 @click.option('--runonce', is_flag=True, default=False,
               help='Only run this once, do not poll.')
+@click.option('--summary-only', is_flag=True, default=False,
+              help='Only print the summary - not all the full json dict.')
 @click.option('--rendertohtml', is_flag=True, default=False,
               help='Do you want to render the stats to HTML?.')
 @click.option('--output-directory', envvar='UBUNTU_WATCH_PACKAGES_OUTPUT_DIRECTORY',
@@ -320,7 +342,7 @@ def cli(ctx):
 @click.pass_context
 def ubuntu_watch_packages(ctx, config, poll_seconds, logging_level,
                           config_skeleton, notify_on_startup, runonce,
-                          rendertohtml, output_directory):
+                          summary_only, rendertohtml, output_directory):
     # type: (Text, int, Text, bool, bool) -> None
     """
     Watch specified packages in the ubuntu archive for transition between
@@ -333,7 +355,10 @@ def ubuntu_watch_packages(ctx, config, poll_seconds, logging_level,
     global POLL_SECONDS
     global PACKAGE_STATUS
     global NOW
+    global SUMMARY_ONLY
 
+    # Set global SUMMARY_ONLY as this is used in the print_stats
+    SUMMARY_ONLY = summary_only
     # Set global POLL_SECONDS as this is used in the status dump
     POLL_SECONDS = poll_seconds
 
