@@ -26,7 +26,7 @@ from launchpadlib.launchpad import Launchpad
 
 # Log in to launchpad annonymously - we use launchpad to find
 # the package publish time
-launchpad = Launchpad.login_anonymously('ubuntu-watch-packages', 'production')
+launchpad = Launchpad.login_anonymously('ubuntu-watch-packages', 'production', version='devel')
 ubuntu = launchpad.distributions["ubuntu"]
 ubuntu_archive = ubuntu.main_archive
 
