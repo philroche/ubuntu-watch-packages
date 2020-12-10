@@ -132,21 +132,24 @@ def get_package_stats(package, series, pocket):
                 source_name=package,
                 pocket=pocket,
                 distro_series=lp_series,
-                status="Published")
+                status="Published",
+                order_by_date=True)
 
         amd64_package_published_binaries = ubuntu_archive.getPublishedBinaries(
                 exact_match=True,
                 binary_name=package,
                 pocket=pocket,
                 distro_arch_series=lp_amd64_arch_series,
-                status="Published")
+                status="Published",
+                order_by_date=True)
 
         arm64_package_published_binaries = ubuntu_archive.getPublishedBinaries(
                 exact_match=True,
                 binary_name=package,
                 pocket=pocket,
                 distro_arch_series=lp_arm64_arch_series,
-                status="Published")
+                status="Published",
+                order_by_date=True)
 
         if len(amd64_package_published_binaries) > 0:
             amd64_package_published_binary = amd64_package_published_binaries[0]
