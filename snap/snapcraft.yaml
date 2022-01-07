@@ -1,5 +1,5 @@
 name: ubuntu-watch-packages
-version: '0.4.4'
+version: '0.4.5'
 base: core18
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
@@ -17,14 +17,16 @@ description: |
 grade: stable
 confinement: strict
 
+architectures:
+  - build-on: amd64
+
 apps:
   ubuntu-watch-packages:
     environment:
       PATH: "$SNAP/usr/bin:$SNAP/bin/:$PATH"
       LC_ALL: "C.UTF-8"
       LANG: "C.UTF-8"
-      JOBLIB_MULTIPROCESSING: 0
-    command: usr/bin/python3 $SNAP/bin/ubuntu-watch-packages
+    command: bin/snapcraft-preload $SNAP/bin/ubuntu-watch-packages
     plugs:
       - network
       - desktop
@@ -44,5 +46,12 @@ parts:
       - python3-launchpadlib
       - distro-info
       - python3-distro-info
+
+  snapcraft-preload:
+    source: https://github.com/diddledan/snapcraft-preload.git
+    source-branch: semaphore-support
+    plugin: cmake
     build-packages:
-      - libapt-pkg-dev
+      - on amd64:
+        - gcc-multilib
+        - g++-multilib
