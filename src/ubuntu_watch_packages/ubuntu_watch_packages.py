@@ -8,13 +8,13 @@ import subprocess
 import time
 import yaml
 
-import apt_pkg
 import click
 import readchar
 import pytz
 
 from babel.dates import format_datetime
 from collections import OrderedDict
+from debian import debian_support
 from distro_info import UbuntuDistroInfo
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
@@ -26,9 +26,6 @@ from ubuntu_package_status import ubuntu_package_status
 # We do use time.sleep which is blocking so it is best to 'nice'
 # the process to reduce CPU usage. https://linux.die.net/man/1/nice
 os.nice(19)
-
-apt_pkg.config.set('RootDir', os.environ.get('SNAP', ''))
-apt_pkg.init_system()
 
 # Dict to store the status of each package
 PACKAGE_STATUS = {}
@@ -136,8 +133,8 @@ def watch_packages(package_config, initial=False, notify_on_startup=False, packa
                     # that in our database?
                     if current_package_version and previous_package_version:
 
-                        vc = apt_pkg.version_compare(current_package_version,
-                                                     previous_package_version)
+                        vc = debian_support.version_compare(current_package_version,
+                                                            previous_package_version)
                         logging.info(message)
                         if vc > 0:
                             """
@@ -297,7 +294,7 @@ def ubuntu_watch_packages(ctx, config, poll_seconds, logging_level,
 
     # Parse config
     with open(config, 'r') as config_file:
-        package_config = yaml.load(config_file)
+        package_config = yaml.safe_load(config_file)
         if config_skeleton:
             output = yaml.dump(package_config, Dumper=yaml.Dumper)
             print("# Sample config.")

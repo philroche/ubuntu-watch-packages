@@ -30,7 +30,6 @@ humanize
 
 ### System requirements (If not using the snap):
 
-- [python-apt](https://packages.ubuntu.com/bionic/python-apt)
 - [python3-launchpadlib](https://packages.ubuntu.com/bionic/python3-launchpadlib)
 - [python3-distro-info](https://packages.ubuntu.com/bionic/python3-distro-info)
 - [notify-send](https://packages.ubuntu.com/bionic/libnotify-bin)
@@ -42,6 +41,7 @@ humanize
 - [click](https://pypi.python.org/pypi/click)
 - [babel](https://pypi.python.org/pypi/Babel)
 - [pyyaml](https://pypi.python.org/pypi/PyYAML)
+- [pyyaml](https://pypi.python.org/pypi/python-debian) 
 - [jinja2](https://pypi.python.org/pypi/jinja2)
 - [ubuntu-package-status](https://pypi.python.org/pypi/ubuntu-package-status)
 

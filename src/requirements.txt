@@ -1,6 +1,7 @@
 babel
 click
 pyyaml
+python-debian
 readchar
 jinja2
 ubuntu-package-status>0.0.1
