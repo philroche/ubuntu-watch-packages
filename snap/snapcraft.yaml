@@ -1,8 +1,8 @@
 name: ubuntu-watch-packages
-version: '0.4.3'
+version: '0.4.4'
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
-  Watch specified packages in the
+  Watch specified binary packages in the
   ubuntu archive for transition between archive pockets. Useful when waiting
   for a package update to be published.
 

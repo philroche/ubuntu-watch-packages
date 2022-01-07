@@ -1,5 +1,6 @@
 # ubuntu-watch-packages
-Watch specified packages in the ubuntu archive for transition between archive pockets. Useful when waiting for a package update to be published.
+Watch specified binary packages in the ubuntu archive for transition between archive pockets. 
+Useful when waiting for a package update to be published.
 
 It polls the launchpad API for new packages every 10 minutes (you can change this by using poll-seconds option)
 
@@ -42,7 +43,7 @@ humanize
 - [babel](https://pypi.python.org/pypi/Babel)
 - [pyyaml](https://pypi.python.org/pypi/PyYAML)
 - [jinja2](https://pypi.python.org/pypi/jinja2)
-- [humanize](https://pypi.python.org/pypi/humanize)
+- [ubuntu-package-status](https://pypi.python.org/pypi/ubuntu-package-status)
 
 ## Snap Usage
 
@@ -56,14 +57,14 @@ which will watch for the following packages:
 ubuntu-versions:
   trusty:
     packages:
-     - linux
+     - linux-generic
      - linux-lts-xenial
   xenial:
     packages:
-     - linux
+     - linux-generic
   artful:
     packages:
-     - linux
+     - linux-generic
 ```
 
 If you want to specify your own config yaml. When using the
@@ -73,6 +74,17 @@ ubuntu-watch-packages snap this config must reside under $HOME.
 ubuntu-watch-packages --config="your-ubuntu-watch-packages-config.yaml"
 ```
 
+If you want to specify a specific architecture to query
+
+```
+ubuntu-watch-packages --package-architecture=amd64
+```
+
+If you want to specify multiple architectures to query
+
+```
+ubuntu-watch-packages --package-architecture=amd64 --package-architecture=arm64
+```
 
 If you want to specify your own polling interval
 

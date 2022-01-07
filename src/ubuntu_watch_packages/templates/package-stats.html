@@ -38,117 +38,37 @@
                 <thead>
                     <tr>
                         <th>Package</th>
-                        <th>Release</th>
-                        <th>Updates</th>
-                        <th>Security</th>
-                        <th>Proposed</th>
+                        {% for pocket in pockets %}
+                            <th>{{ pocket }}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                {% for package, stats in packages.items() %}
+                {% for package, pockets in packages.items() %}
                     <tr>
                         <td><a href="https://pad.lv/p/{{ package }}">{{ package }}</a></td>
-                        <td>
-                            {%  if stats.Release.version or stats.Release.full_version or stats.Release.date_published %}
-                                <dl>
-                                    <dt>Version</dt>
-                                    <dd>{{ stats.Release.version }}</dd>
-                                    <dt>Full version</dt>
-                                    <dd><a href="{{ stats.Release.link }}">{{ stats.Release.full_version }}</a></dd>
-                                    <dt>Date Published</dt>
-                                    <dd>{{ stats.Release.date_published }} <em>({{ stats.Release.published_age }})</em></dd>
-                                </dl>
-                            {% endif %}
-                            {%  if stats.Release.binaries.amd64.version or stats.Release.binaries.arm64.version %}
-                                <strong>Binaries</strong>
-                                <dl>
-                                    {% if stats.Release.binaries.amd64.version %}
-                                        <dt>AMD64</dt>
-                                        <dd><a href="{{ stats.Release.binaries.amd64.link }}">{{ stats.Release.binaries.amd64.version }}</a></dd>
+                        {% for pocket, architectures in pockets.items() %}
+                            <td>
+                                {% for architecture, stats in architectures.items() %}
+                                    {%  if stats.version or stats.full_version or stats.date_published %}
+                                        <dl>
+                                            <dt>Pocket</dt>
+                                            <dd>{{ pocket }}</dd>
+                                            <dt>Architecture</dt>
+                                            <dd>{{ architecture }}</dd>
+                                            <dt><a href="{{ stats.link }}">Version</a></dt>
+                                            <dd>{{ stats.version }}</dd>
+                                            <dt>Full version</dt>
+                                            <dd><a href="{{ stats.build_link }}">{{ stats.full_version }}</a></dd>
+                                            <dt>Date Published</dt>
+                                            <dd>{{ stats.date_published }} <br /><em>({{ stats.published_age }})</em></dd>
+                                        </dl>
                                     {% endif %}
-                                    {% if stats.Release.binaries.arm64.version %}
-                                    <dt>ARM64</dt>
-                                    <dd><a href="{{ stats.Release.binaries.arm64.link }}">{{ stats.Release.binaries.arm64.version }}</a></dd>
-                                    {% endif %}
-                                </dl>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {%  if stats.Updates.version or stats.Updates.full_version or stats.Updates.date_published %}
-                                <dl>
-                                    <dt>Version</dt>
-                                    <dd>{{ stats.Updates.version }}</dd>
-                                    <dt>Full version</dt>
-                                    <dd><a href="{{ stats.Updates.link }}">{{ stats.Updates.full_version }}</a></dd>
-                                    <dt>Date Published</dt>
-                                    <dd>{{ stats.Updates.date_published }} <em>({{ stats.Updates.published_age }})</em></dd>
-                                </dl>
-                            {% endif %}
-                            {%  if stats.Updates.binaries.amd64.version or stats.Updates.binaries.arm64.version %}
-                                <strong>Binaries</strong>
-                                <dl>
-                                    {% if stats.Updates.binaries.amd64.version %}
-                                        <dt>AMD64</dt>
-                                        <dd><a href="{{ stats.Updates.binaries.amd64.link }}">{{ stats.Updates.binaries.amd64.version }}</a></dd>
-                                    {% endif %}
-                                    {% if stats.Updates.binaries.arm64.version %}
-                                    <dt>ARM64</dt>
-                                    <dd><a href="{{ stats.Updates.binaries.arm64.link }}">{{ stats.Updates.binaries.arm64.version }}</a></dd>
-                                    {% endif %}
-                                </dl>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {%  if stats.Security.version or stats.Security.full_version or stats.Security.date_published %}
-                                <dl>
-                                    <dt>Version</dt>
-                                    <dd>{{ stats.Security.version }}</dd>
-                                    <dt>Full version</dt>
-                                    <dd><a href="{{ stats.Security.link }}">{{ stats.Security.full_version }}</a></dd>
-                                    <dt>Date Published</dt>
-                                    <dd>{{ stats.Security.date_published }} <em>({{ stats.Security.published_age }})</em></dd>
-                                </dl>
-                            {% endif %}
-                            {%  if stats.Security.binaries.amd64.version or stats.Security.binaries.arm64.version %}
-                                <strong>Binaries</strong>
-                                <dl>
-                                    {% if stats.Security.binaries.amd64.version %}
-                                        <dt>AMD64</dt>
-                                        <dd><a href="{{ stats.Security.binaries.amd64.link }}">{{ stats.Security.binaries.amd64.version }}</a></dd>
-                                    {% endif %}
-                                    {% if stats.Security.binaries.arm64.version %}
-                                    <dt>ARM64</dt>
-                                    <dd><a href="{{ stats.Security.binaries.arm64.link }}">{{ stats.Security.binaries.arm64.version }}</a></dd>
-                                    {% endif %}
-                                </dl>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {%  if stats.Proposed.version or stats.Proposed.full_version or stats.Proposed.date_published %}
-                                <dl>
-                                    <dt>Version</dt>
-                                    <dd>{{ stats.Proposed.version }}</dd>
-                                    <dt>Full version</dt>
-                                    <dd><a href="{{ stats.Proposed.link }}">{{ stats.Proposed.full_version }}</a></dd>
-                                    <dt>Date Published</dt>
-                                    <dd>{{ stats.Proposed.date_published }} <em>({{ stats.Proposed.published_age }})</em></dd>
-                                </dl>
-                            {% endif %}
-                            {%  if stats.Proposed.binaries.amd64.version or stats.Proposed.binaries.arm64.version %}
-                                <strong>Binaries</strong>
-                                <dl>
-                                    {% if stats.Proposed.binaries.amd64.version %}
-                                        <dt>AMD64</dt>
-                                        <dd><a href="{{ stats.Proposed.binaries.amd64.link }}">{{ stats.Proposed.binaries.amd64.version }}</a></dd>
-                                    {% endif %}
-                                    {% if stats.Proposed.binaries.arm64.version %}
-                                    <dt>ARM64</dt>
-                                    <dd><a href="{{ stats.Proposed.binaries.arm64.link }}">{{ stats.Proposed.binaries.arm64.version }}</a></dd>
-                                    {% endif %}
-                                </dl>
-                            {% endif %}
-                        </td>
+                                {% endfor %}
+                            </td>
+                       {% endfor %}
                     </tr>
+
                 {% endfor %}
                 </tbody>
                 </table>

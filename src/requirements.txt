@@ -3,4 +3,4 @@ click
 pyyaml
 readchar
 jinja2
-humanize
+ubuntu-package-status>0.0.1
