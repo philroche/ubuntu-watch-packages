@@ -1,5 +1,6 @@
 name: ubuntu-watch-packages
 version: '0.4.4'
+base: core18
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
   Watch specified binary packages in the
@@ -18,27 +19,23 @@ confinement: strict
 
 apps:
   ubuntu-watch-packages:
-    command: wrapper
+    environment:
+      PATH: "$SNAP/usr/bin:$SNAP/bin/:$PATH"
+      LC_ALL: "C.UTF-8"
+      LANG: "C.UTF-8"
+      JOBLIB_MULTIPROCESSING: 0
+    command: usr/bin/python3 $SNAP/bin/ubuntu-watch-packages
     plugs:
       - network
       - desktop
       - home
 
 parts:
-  ubuntu-watch-packages-wrapper:
-    plugin: dump
-    source: snap/local
-    prepare: |
-      chmod +x wrapper
-    stage:
-      - usr/bin/wrapper
-    organize:
-      wrapper: usr/bin/wrapper
-
   ubuntu-watch-packages:
     plugin: python
-    python-version: python3
-    requirements: snap-virtualenv-requirements.txt
+    requirements:
+     - snap-virtualenv-requirements.txt
+     - src/requirements.txt
     source: .
     stage-packages:
       - devscripts
