@@ -4,4 +4,4 @@ pyyaml
 python-debian
 readchar
 jinja2
-ubuntu-package-status>0.0.1
+ubuntu-package-status>=0.0.4

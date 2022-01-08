@@ -23,26 +23,25 @@ python ubuntu_watch_packages.py --help
 
 babel
 click
+humanize
+jinja2
 pyyaml
 readchar
-jinja2
-humanize
+
 
 ### System requirements (If not using the snap):
 
-- [python3-launchpadlib](https://packages.ubuntu.com/bionic/python3-launchpadlib)
-- [python3-distro-info](https://packages.ubuntu.com/bionic/python3-distro-info)
 - [notify-send](https://packages.ubuntu.com/bionic/libnotify-bin)
-- [distro_info](https://packages.ubuntu.com/bionic/distro_info)
 
 ### Python dependencies (If not using the snap):
 
-- [readchar](https://pypi.python.org/pypi/readchar)
-- [click](https://pypi.python.org/pypi/click)
+
 - [babel](https://pypi.python.org/pypi/Babel)
+- [click](https://pypi.python.org/pypi/click)
 - [pyyaml](https://pypi.python.org/pypi/PyYAML)
-- [pyyaml](https://pypi.python.org/pypi/python-debian) 
+- [python-debian](https://pypi.python.org/pypi/python-debian) 
 - [jinja2](https://pypi.python.org/pypi/jinja2)
+- [readchar](https://pypi.python.org/pypi/readchar)
 - [ubuntu-package-status](https://pypi.python.org/pypi/ubuntu-package-status)
 
 ## Snap Usage

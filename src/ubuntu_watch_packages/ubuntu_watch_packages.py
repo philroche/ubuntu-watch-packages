@@ -15,7 +15,6 @@ import pytz
 from babel.dates import format_datetime
 from collections import OrderedDict
 from debian import debian_support
-from distro_info import UbuntuDistroInfo
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from pkg_resources import resource_filename
@@ -182,12 +181,6 @@ def render(package_stats, output_directory, package_config):
             os.path.realpath(__file__)), "templates")
     env = Environment(loader=FileSystemLoader(abs_templates_path))
     package_stats_template = env.get_template('package-stats.html')
-
-    # sort the package stats
-    correct_order = UbuntuDistroInfo().all
-
-    package_stats = OrderedDict(sorted(package_stats.items(),
-                                       key=lambda i:correct_order.index(i[0])))
 
     # Make sure the output directory exists
     os.makedirs(output_directory, exist_ok=True)

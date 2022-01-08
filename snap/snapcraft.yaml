@@ -1,5 +1,5 @@
 name: ubuntu-watch-packages
-version: '0.4.5'
+version: '0.4.6'
 base: core18
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
@@ -36,16 +36,10 @@ parts:
   ubuntu-watch-packages:
     plugin: python
     requirements:
-     - snap-virtualenv-requirements.txt
      - src/requirements.txt
     source: .
     stage-packages:
-      - devscripts
-      - apt
       - libnotify-bin
-      - python3-launchpadlib
-      - distro-info
-      - python3-distro-info
 
   snapcraft-preload:
     source: https://github.com/diddledan/snapcraft-preload.git
