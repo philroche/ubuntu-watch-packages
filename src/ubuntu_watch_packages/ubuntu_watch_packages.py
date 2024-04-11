@@ -167,7 +167,6 @@ def watch_packages(package_config, initial=False, notify_on_startup=False, packa
                             NOTIFICATIONS_SENT.append(message)
                             if not initial or (
                                     initial
-                                    and pocket == "Proposed"
                                     and notify_on_startup):
                                 send_notification_message(message)
 
@@ -309,6 +308,7 @@ def ubuntu_watch_packages(ctx, config, poll_seconds, logging_level,
         print("Press \"p\" to see package status.")
         t = Thread(target=keypress)
         t.start()
+
         while True:
             time.sleep(poll_seconds)  # wait before checking again
             NOW = pytz.utc.localize(datetime.utcnow())
