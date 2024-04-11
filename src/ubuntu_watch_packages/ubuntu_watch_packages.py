@@ -160,7 +160,7 @@ def watch_packages(package_config, initial=False, notify_on_startup=False, packa
 
                     # If the package is newer or it's a new package send
                     # a notification
-                    if newer_package or new_package:
+                    if initial or newer_package or new_package:
                         PACKAGE_STATUS[ubuntu_version][package][pocket][architecture] \
                             = package_stats
                         if message and message not in NOTIFICATIONS_SENT:
