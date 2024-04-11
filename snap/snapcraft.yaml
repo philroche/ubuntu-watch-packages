@@ -1,5 +1,5 @@
 name: ubuntu-watch-packages
-version: '0.4.6'
+version: '0.4.7'
 base: core18
 summary: Helpful utility to watch specified packages in the ubuntu archive.
 description: |
